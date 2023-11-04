@@ -38,14 +38,14 @@ import lombok.Setter;
 @Setter
 public class Restaurant {
 
-    private int restaurantId;
+    private String restaurantId;
     private String name;
     private String city;
     private String imageUrl;
     private double latitude;
     private double longitude;
-    private double opensAt;
-    private double closesAt;
+    private String opensAt;
+    private String closesAt;
     private List<String> attributes;
 
 }
