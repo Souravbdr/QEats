@@ -7,15 +7,11 @@
 
 package com.crio.qeats.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.util.ArrayList;
-import java.util.List;
-import javax.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.util.List;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 // TODO: CRIO_TASK_MODULE_SERIALIZATION
 //  Implement Restaurant class.
@@ -38,6 +34,8 @@ import lombok.Setter;
 @Setter
 public class Restaurant {
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String id;
     private String restaurantId;
     private String name;
     private String city;
@@ -47,6 +45,5 @@ public class Restaurant {
     private String opensAt;
     private String closesAt;
     private List<String> attributes;
-
 }
 
