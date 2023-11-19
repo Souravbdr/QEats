@@ -3,7 +3,7 @@
 #!/bin/bash
 
 lat=12.9
-lng=77.7
+lng=77.8
 
 source coordinates.txt
 
