@@ -1,6 +1,6 @@
 /*
  *
- * * Copyright (c) Crio.Do 2019. All rights reserved
+ *  * Copyright (c) Crio.Do 2019. All rights reserved
  *
  */
 
@@ -69,7 +69,7 @@ public class RestaurantRepositoryServiceImpl implements RestaurantRepositoryServ
   public List<Restaurant> findAllRestaurantsCloseBy(Double latitude, Double longitude,
       LocalTime currentTime, Double servingRadiusInKms) {
     List<RestaurantEntity> restaurantList = restaurantRepository.findAll();
-
+      System.out.println("SIZE-->"+restaurantList.size());
     List<Restaurant> restaurants = new ArrayList<>();
     for (RestaurantEntity restaurantEntity : restaurantList) {
       if (isRestaurantCloseByAndOpen(restaurantEntity, currentTime, latitude, longitude,
