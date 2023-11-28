@@ -6,10 +6,12 @@
 
 package com.crio.qeats.controller;
 
+import com.crio.qeats.dto.Restaurant;
 import com.crio.qeats.exchanges.GetRestaurantsRequest;
 import com.crio.qeats.exchanges.GetRestaurantsResponse;
 import com.crio.qeats.services.RestaurantService;
 import java.time.LocalTime;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +69,11 @@ public class RestaurantController {
 
     // CHECKSTYLE:OFF
     getRestaurantsResponse = restaurantService.findAllRestaurantsCloseBy(getRestaurantsRequest, LocalTime.now());
+    List<Restaurant> restaurants = getRestaurantsResponse.getRestaurants();
+    for (Restaurant restaurant : restaurants) {
+      String sanitizedName = restaurant.getName().replaceAll("[Â©éí]", "e");
+      restaurant.setName(sanitizedName);
+     }
     log.info("getRestaurants returned {}", getRestaurantsResponse);
     System.out.println(getRestaurantsResponse);
     // CHECKSTYLE:ON
