@@ -13,6 +13,8 @@ import com.crio.qeats.exchanges.GetRestaurantsResponse;
 import com.crio.qeats.repositoryservices.RestaurantRepositoryService;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -90,6 +92,8 @@ public class RestaurantServiceImpl implements RestaurantService {
   @Override
   public GetRestaurantsResponse findRestaurantsBySearchQuery(
       GetRestaurantsRequest getRestaurantsRequest, LocalTime currentTime) {
+    if (getRestaurantsRequest.getSearchFor() == null || getRestaurantsRequest.getSearchFor() == "")
+      return new GetRestaurantsResponse(Collections.emptyList());
     LocalTime time8 = LocalTime.of(8, 0);
     LocalTime time10 = LocalTime.of(10, 0);
 

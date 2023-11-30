@@ -65,7 +65,7 @@ public class RestaurantController {
 
     // CHECKSTYLE:OFF
     getRestaurantsResponse = restaurantService.findAllRestaurantsCloseBy(getRestaurantsRequest, LocalTime.now());
-    if(getRestaurantsRequest.getSearchFor()!=null){
+    if(getRestaurantsRequest.getSearchFor()!=null || getRestaurantsRequest.getSearchFor()!=""){
       GetRestaurantsResponse resp = restaurantService.findRestaurantsBySearchQuery(getRestaurantsRequest, LocalTime.now());
       getRestaurantsResponse.getRestaurants().addAll(resp!=null ? resp.getRestaurants():Collections.emptyList());
     }
