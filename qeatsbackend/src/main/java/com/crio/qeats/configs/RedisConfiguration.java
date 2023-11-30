@@ -49,7 +49,7 @@ public class RedisConfiguration {
         new JedisPool(new JedisPoolConfig(), redisHost, redisPort, REDIS_ENTRY_EXPIRY_IN_SECONDS);
   }
 
-	public JedisPool jedisPool() {
+	public JedisPool getJedisPool() {
 		return jedisPool;
 	}
   /**

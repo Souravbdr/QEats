@@ -72,7 +72,7 @@ class RestaurantRepositoryServiceCacheTest {
 
     when(mockRestaurantRepository.findAll()).thenReturn(listOfRestaurants());
 
-    Jedis jedis = redisConfiguration.jedisPool().getResource();
+    Jedis jedis = redisConfiguration.getJedisPool().getResource();
 
     // call it twice
     List<Restaurant> allRestaurantsCloseBy = restaurantRepositoryService

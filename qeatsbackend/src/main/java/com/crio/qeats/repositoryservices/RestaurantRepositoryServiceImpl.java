@@ -79,9 +79,9 @@ public class RestaurantRepositoryServiceImpl implements RestaurantRepositoryServ
         geoLocation.getLongitude(), 7);
     List<Restaurant> restaurants = new ArrayList<>();
     if (redisConfiguration.isCacheAvailable()
-    && redisConfiguration.jedisPool().getResource().exists(geoHash.toBase32())) {
+    && redisConfiguration.getJedisPool().getResource().exists(geoHash.toBase32())) {
       System.out.println("From Cache");
-      restaurants = retrieveRestaurantListFromRedis(redisConfiguration.jedisPool().getResource(),
+      restaurants = retrieveRestaurantListFromRedis(redisConfiguration.getJedisPool().getResource(),
       geoHash.toBase32());
     } else {
       System.out.println("From Mongo");
@@ -92,7 +92,7 @@ public class RestaurantRepositoryServiceImpl implements RestaurantRepositoryServ
           restaurants.add(modelMapper.map(restaurantEntity, Restaurant.class));
         }
       }
-      saveRestaurantListToRedis(redisConfiguration.jedisPool().getResource(), geoHash.toBase32(),
+      saveRestaurantListToRedis(redisConfiguration.getJedisPool().getResource(), geoHash.toBase32(),
       restaurants);
     }
     
