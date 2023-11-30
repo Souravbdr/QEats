@@ -1,7 +1,7 @@
 
 /*
  *
- *  * Copyright (c) Crio.Do 2019. All rights reserved
+ * * Copyright (c) Crio.Do 2019. All rights reserved
  *
  */
 
@@ -37,43 +37,44 @@ public class RestaurantServiceImpl implements RestaurantService {
   // TODO: CRIO_TASK_MODULE_RESTAURANTSAPI - Implement findAllRestaurantsCloseby.
   // Check RestaurantService.java file for the interface contract.
   /**
-   * Get all the restaurants that are open now within a specific service radius.
-   * - For peak hours: 8AM - 10AM, 1PM-2PM, 7PM-9PM
-   * - service radius is 3KMs.
-   * - All other times, serving radius is 5KMs.
-   * - If there are no restaurants, return empty list of restaurants.
+   * Get all the restaurants that are open now within a specific service radius. - For peak hours:
+   * 8AM - 10AM, 1PM-2PM, 7PM-9PM - service radius is 3KMs. - All other times, serving radius is
+   * 5KMs. - If there are no restaurants, return empty list of restaurants.
+   * 
    * @param getRestaurantsRequest valid lat/long
    * @param currentTime current time.
-   * @return GetRestaurantsResponse object containing a list of open restaurants or an
-   *     empty list if none fits the criteria.
+   * @return GetRestaurantsResponse object containing a list of open restaurants or an empty list if
+   *         none fits the criteria.
    */
   @Override
   public GetRestaurantsResponse findAllRestaurantsCloseBy(
       GetRestaurantsRequest getRestaurantsRequest, LocalTime currentTime) {
-        LocalTime time8 = LocalTime.of(8,0);
-        LocalTime time10 = LocalTime.of(10,0);
+    LocalTime time8 = LocalTime.of(8, 0);
+    LocalTime time10 = LocalTime.of(10, 0);
 
-        LocalTime time13 = LocalTime.of(13,0);
-        LocalTime time14 = LocalTime.of(14,0);
+    LocalTime time13 = LocalTime.of(13, 0);
+    LocalTime time14 = LocalTime.of(14, 0);
 
-        LocalTime time19 = LocalTime.of(19,0);
-        LocalTime time21 = LocalTime.of(21,0);
+    LocalTime time19 = LocalTime.of(19, 0);
+    LocalTime time21 = LocalTime.of(21, 0);
 
-        List<Restaurant> restaurants;
-        System.out.println("Inside Service");
-        if(currentTime.isAfter(time8) && currentTime.isBefore(time10) 
-          || currentTime.isAfter(time13) && currentTime.isBefore(time14) 
-            || currentTime.isAfter(time19) && currentTime.isBefore(time21)
-            || currentTime.equals(time8) || currentTime.equals(time10)
-            || currentTime.equals(time13) || currentTime.equals(time14)
-            || currentTime.equals(time19) || currentTime.equals(time21)){
-              restaurants = new ArrayList<>(restaurantRepositoryService.findAllRestaurantsCloseBy(getRestaurantsRequest.getLatitude(),getRestaurantsRequest.getLongitude(), currentTime, peakHoursServingRadiusInKms));
-            }
-            else{
-              restaurants = new ArrayList<>(restaurantRepositoryService.findAllRestaurantsCloseBy(getRestaurantsRequest.getLatitude(),getRestaurantsRequest.getLongitude(), currentTime, normalHoursServingRadiusInKms));
-            }
-            
-     return new GetRestaurantsResponse(restaurants);
+    List<Restaurant> restaurants;
+    System.out.println("Inside Service");
+    if (currentTime.isAfter(time8) && currentTime.isBefore(time10)
+        || currentTime.isAfter(time13) && currentTime.isBefore(time14)
+        || currentTime.isAfter(time19) && currentTime.isBefore(time21) || currentTime.equals(time8)
+        || currentTime.equals(time10) || currentTime.equals(time13) || currentTime.equals(time14)
+        || currentTime.equals(time19) || currentTime.equals(time21)) {
+      restaurants = new ArrayList<>(
+          restaurantRepositoryService.findAllRestaurantsCloseBy(getRestaurantsRequest.getLatitude(),
+              getRestaurantsRequest.getLongitude(), currentTime, peakHoursServingRadiusInKms));
+    } else {
+      restaurants = new ArrayList<>(
+          restaurantRepositoryService.findAllRestaurantsCloseBy(getRestaurantsRequest.getLatitude(),
+              getRestaurantsRequest.getLongitude(), currentTime, normalHoursServingRadiusInKms));
+    }
+
+    return new GetRestaurantsResponse(restaurants);
   }
 
 
@@ -89,30 +90,52 @@ public class RestaurantServiceImpl implements RestaurantService {
   @Override
   public GetRestaurantsResponse findRestaurantsBySearchQuery(
       GetRestaurantsRequest getRestaurantsRequest, LocalTime currentTime) {
-        LocalTime time8 = LocalTime.of(8,0);
-        LocalTime time10 = LocalTime.of(10,0);
+    LocalTime time8 = LocalTime.of(8, 0);
+    LocalTime time10 = LocalTime.of(10, 0);
 
-        LocalTime time13 = LocalTime.of(13,0);
-        LocalTime time14 = LocalTime.of(14,0);
+    LocalTime time13 = LocalTime.of(13, 0);
+    LocalTime time14 = LocalTime.of(14, 0);
 
-        LocalTime time19 = LocalTime.of(19,0);
-        LocalTime time21 = LocalTime.of(21,0);
+    LocalTime time19 = LocalTime.of(19, 0);
+    LocalTime time21 = LocalTime.of(21, 0);
 
-        List<Restaurant> restaurants;
-        System.out.println("Inside Service");
-        if(currentTime.isAfter(time8) && currentTime.isBefore(time10) 
-          || currentTime.isAfter(time13) && currentTime.isBefore(time14) 
-            || currentTime.isAfter(time19) && currentTime.isBefore(time21)
-            || currentTime.equals(time8) || currentTime.equals(time10)
-            || currentTime.equals(time13) || currentTime.equals(time14)
-            || currentTime.equals(time19) || currentTime.equals(time21)){
-              restaurants = new ArrayList<>(restaurantRepositoryService.findRestaurantsByName(getRestaurantsRequest.getLatitude(),getRestaurantsRequest.getLongitude(),getRestaurantsRequest.getSearchFor(), currentTime, peakHoursServingRadiusInKms));
-            }
-            else{
-              restaurants = new ArrayList<>(restaurantRepositoryService.findRestaurantsByName(getRestaurantsRequest.getLatitude(),getRestaurantsRequest.getLongitude(), getRestaurantsRequest.getSearchFor(), currentTime, normalHoursServingRadiusInKms));
-            }
-            
-     return new GetRestaurantsResponse(restaurants);
+    List<Restaurant> restaurants;
+    System.out.println("Inside Service");
+    if (currentTime.isAfter(time8) && currentTime.isBefore(time10)
+        || currentTime.isAfter(time13) && currentTime.isBefore(time14)
+        || currentTime.isAfter(time19) && currentTime.isBefore(time21) || currentTime.equals(time8)
+        || currentTime.equals(time10) || currentTime.equals(time13) || currentTime.equals(time14)
+        || currentTime.equals(time19) || currentTime.equals(time21)) {
+      restaurants = new ArrayList<>(restaurantRepositoryService.findRestaurantsByName(
+          getRestaurantsRequest.getLatitude(), getRestaurantsRequest.getLongitude(),
+          getRestaurantsRequest.getSearchFor(), currentTime, peakHoursServingRadiusInKms));
+      restaurants.addAll(new ArrayList<>(restaurantRepositoryService.findRestaurantsByAttributes(
+          getRestaurantsRequest.getLatitude(), getRestaurantsRequest.getLongitude(),
+          getRestaurantsRequest.getSearchFor(), currentTime, peakHoursServingRadiusInKms)));
+    } else {
+      restaurants = new ArrayList<>(restaurantRepositoryService.findRestaurantsByName(
+          getRestaurantsRequest.getLatitude(), getRestaurantsRequest.getLongitude(),
+          getRestaurantsRequest.getSearchFor(), currentTime, normalHoursServingRadiusInKms));
+      restaurants.addAll(new ArrayList<>(restaurantRepositoryService.findRestaurantsByAttributes(
+          getRestaurantsRequest.getLatitude(), getRestaurantsRequest.getLongitude(),
+          getRestaurantsRequest.getSearchFor(), currentTime, normalHoursServingRadiusInKms)));
+    }
+
+
+    return new GetRestaurantsResponse(removeDuplicates(restaurants));
+  }
+
+  private List<Restaurant> removeDuplicates(List<Restaurant> restaurantList) {
+    Set<String> seenIds = new HashSet<>();
+    List<Restaurant> uniqueRestaurantList = new ArrayList<>();
+
+    for (Restaurant restaurant : restaurantList) {
+      if (seenIds.add(restaurant.getId())) {
+        uniqueRestaurantList.add(restaurant);
+      }
+    }
+
+    return uniqueRestaurantList;
   }
 
 }

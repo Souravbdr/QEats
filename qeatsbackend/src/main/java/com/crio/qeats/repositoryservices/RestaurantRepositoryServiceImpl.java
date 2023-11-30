@@ -151,15 +151,16 @@ public class RestaurantRepositoryServiceImpl implements RestaurantRepositoryServ
   @Override
   public List<Restaurant> findRestaurantsByName(Double latitude, Double longitude,
       String searchString, LocalTime currentTime, Double servingRadiusInKms) {
-
-    List<RestaurantEntity> restaurants =
-        restaurantRepository.findRestaurantsByNameExact(searchString);
-    
-    return restaurants==null ? Collections.emptyList(): convertToRestaurantList(restaurants);
-  }
-
-  private List<Restaurant> convertToRestaurantList(List<RestaurantEntity> restaurantEntities) {
-    return restaurantEntities.stream().map(this::convertToDto).collect(Collectors.toList());
+    List<Restaurant> restaurants = new ArrayList<>();
+    List<RestaurantEntity> restaurantList =
+        restaurantRepository.findRestaurantsByNameExact(searchString).get();
+    for (RestaurantEntity restaurantEntity : restaurantList) {
+      if (isRestaurantCloseByAndOpen(restaurantEntity, currentTime, latitude, longitude,
+          servingRadiusInKms)) {
+        restaurants.add(convertToDto(restaurantEntity));
+      }
+    }
+    return restaurants;
   }
 
   private Restaurant convertToDto(RestaurantEntity restaurantEntity) {
@@ -173,9 +174,16 @@ public class RestaurantRepositoryServiceImpl implements RestaurantRepositoryServ
   @Override
   public List<Restaurant> findRestaurantsByAttributes(Double latitude, Double longitude,
       String searchString, LocalTime currentTime, Double servingRadiusInKms) {
-
-
-    return null;
+    List<Restaurant> restaurants = new ArrayList<>();
+    List<RestaurantEntity> restaurantList =
+        restaurantRepository.findByAttributesContaining(searchString).get();
+    for (RestaurantEntity restaurantEntity : restaurantList) {
+      if (isRestaurantCloseByAndOpen(restaurantEntity, currentTime, latitude, longitude,
+          servingRadiusInKms)) {
+        restaurants.add(convertToDto(restaurantEntity));
+      }
+    }
+    return restaurants;
   }
 
 
