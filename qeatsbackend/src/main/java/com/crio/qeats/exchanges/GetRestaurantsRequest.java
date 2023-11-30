@@ -17,6 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 // TODO: CRIO_TASK_MODULE_RESTAURANTSAPI
 // Implement GetRestaurantsRequest.
@@ -27,22 +28,21 @@ import lombok.NoArgsConstructor;
 // this class should be able to deserialize lat/long and optional searchFor from that.
 @Getter
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class GetRestaurantsRequest {
 
     @NotNull(message = "missing latitude")
     @DecimalMin(value = "-90", inclusive = true, message = "Latitude must be greater than or equal to -90")
     @DecimalMax(value = "90", inclusive = true, message = "Latitude must be less than or equal to 90")
-    private Double latitude;
+    private final Double latitude;
 
     @NotNull(message = "missing longitude")
     @DecimalMin(value = "-180", inclusive = true, message = "Longitude must be greater than or equal to -180")
     @DecimalMax(value = "180", inclusive = true, message = "Longitude must be less than or equal to 180")
-    private Double longitude;
+    private final Double longitude;
 
-    // @JsonProperty(required=false)
-    // private String searchFor;
+    @JsonProperty(required=false)
+    private String searchFor;
 
 }
 

@@ -11,6 +11,8 @@ import com.crio.qeats.exchanges.GetRestaurantsRequest;
 import com.crio.qeats.exchanges.GetRestaurantsResponse;
 import com.crio.qeats.services.RestaurantService;
 import java.time.LocalTime;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.extern.log4j.Log4j2;
@@ -58,13 +60,15 @@ public class RestaurantController {
       @Valid GetRestaurantsRequest getRestaurantsRequest) {
     // System.out.println("test");
     System.out.println(getRestaurantsRequest);
-    // if (getRestaurantsRequest.getLatitude().contains(".") || inputValue.contains(",")) {
-    //   return ResponseEntity.ok("Value is a valid decimal: " + doubleValue);
     log.info("getRestaurants called with {}", getRestaurantsRequest);
     GetRestaurantsResponse getRestaurantsResponse;
 
     // CHECKSTYLE:OFF
     getRestaurantsResponse = restaurantService.findAllRestaurantsCloseBy(getRestaurantsRequest, LocalTime.now());
+    if(getRestaurantsRequest.getSearchFor()!=null){
+      GetRestaurantsResponse resp = restaurantService.findRestaurantsBySearchQuery(getRestaurantsRequest, LocalTime.now());
+      getRestaurantsResponse.getRestaurants().addAll(resp!=null ? resp.getRestaurants():Collections.emptyList());
+    }
     List<Restaurant> restaurants = getRestaurantsResponse.getRestaurants();
     for (Restaurant restaurant : restaurants) {
       String sanitizedName = restaurant.getName().replaceAll("[Â©éí]", "e");
@@ -91,46 +95,5 @@ public class RestaurantController {
         String errorMessage = errorMessageBuilder.toString().trim();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
     }
-
-
-
-  // TIP(MODULE_MENUAPI): Model Implementation for getting menu given a restaurantId.
-  // Get the Menu for the given restaurantId
-  // API URI: /qeats/v1/menu?restaurantId=11
-  // Method: GET
-  // Query Params: restaurantId
-  // Success Output:
-  // 1). If restaurantId is present return Menu
-  // 2). Otherwise respond with BadHttpRequest.
-  //
-  // HTTP Code: 200
-  // {
-  // "menu": {
-  // "items": [
-  // {
-  // "attributes": [
-  // "South Indian"
-  // ],
-  // "id": "1",
-  // "imageUrl": "www.google.com",
-  // "itemId": "10",
-  // "name": "Idly",
-  // "price": 45
-  // }
-  // ],
-  // "restaurantId": "11"
-  // }
-  // }
-  // Error Response:
-  // HTTP Code: 4xx, if client side error.
-  // : 5xx, if server side error.
-  // Eg:
-  // curl -X GET "http://localhost:8081/qeats/v1/menu?restaurantId=11"
-  ///
-  // curl -X GET
-  // "http://localhost:8081/qeats/v1/restaurants?latitude=28.4900591&longitude=77.536386&searchFor=tamil"
-
-
-
 }
 
