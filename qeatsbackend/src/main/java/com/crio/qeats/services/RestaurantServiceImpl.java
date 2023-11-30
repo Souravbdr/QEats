@@ -60,17 +60,17 @@ public class RestaurantServiceImpl implements RestaurantService {
         LocalTime time21 = LocalTime.of(21,0);
 
         List<Restaurant> restaurants;
-
+        System.out.println("Inside Service");
         if(currentTime.isAfter(time8) && currentTime.isBefore(time10) 
           || currentTime.isAfter(time13) && currentTime.isBefore(time14) 
             || currentTime.isAfter(time19) && currentTime.isBefore(time21)
             || currentTime.equals(time8) || currentTime.equals(time10)
             || currentTime.equals(time13) || currentTime.equals(time14)
             || currentTime.equals(time19) || currentTime.equals(time21)){
-              restaurants = new ArrayList<>(restaurantRepositoryService.findAllRestaurantsCloseBy(getRestaurantsRequest.getLatitude(),getRestaurantsRequest.getLongitude(), currentTime, 3.0));
+              restaurants = new ArrayList<>(restaurantRepositoryService.findAllRestaurantsCloseBy(getRestaurantsRequest.getLatitude(),getRestaurantsRequest.getLongitude(), currentTime, peakHoursServingRadiusInKms));
             }
             else{
-              restaurants = new ArrayList<>(restaurantRepositoryService.findAllRestaurantsCloseBy(getRestaurantsRequest.getLatitude(),getRestaurantsRequest.getLongitude(), currentTime, 5.0));
+              restaurants = new ArrayList<>(restaurantRepositoryService.findAllRestaurantsCloseBy(getRestaurantsRequest.getLatitude(),getRestaurantsRequest.getLongitude(), currentTime, normalHoursServingRadiusInKms));
             }
             
      return new GetRestaurantsResponse(restaurants);

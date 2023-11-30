@@ -33,10 +33,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-// TODO: CRIO_TASK_MODULE_RESTAURANTSAPI
-// Implement Controller using Spring annotations.
-// Remember, annotations have various "targets". They can be class level, method level or others.
-
 @RestController
 @RequestMapping(RestaurantController.RESTAURANT_API_ENDPOINT)
 @Log4j2
@@ -81,13 +77,6 @@ public class RestaurantController {
     return ResponseEntity.ok().body(getRestaurantsResponse);
   }
 
-  // @ExceptionHandler(MethodArgumentNotValidException.class)
-  // @ResponseStatus(HttpStatus.BAD_REQUEST)
-  // public ResponseEntity<String> handleValidationExceptions(MethodArgumentNotValidException ex) {
-  //   String errorMessage = "Invalid request parameters. Please provide both latitude and longitude.";
-  //   System.out.println("*****54446****");
-  //   return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
-  // }
     @ExceptionHandler(BindException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<String> handleBindException(BindException ex) {
