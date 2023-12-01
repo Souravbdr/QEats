@@ -8,6 +8,7 @@
 package com.crio.qeats.services;
 
 import com.crio.qeats.dto.Restaurant;
+import com.crio.qeats.exceptions.QEatsAsyncException;
 import com.crio.qeats.exchanges.GetRestaurantsRequest;
 import com.crio.qeats.exchanges.GetRestaurantsResponse;
 import com.crio.qeats.repositoryservices.RestaurantRepositoryService;
@@ -20,6 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import lombok.extern.log4j.Log4j2;
@@ -110,19 +112,35 @@ public class RestaurantServiceImpl implements RestaurantService {
         || currentTime.isAfter(time19) && currentTime.isBefore(time21) || currentTime.equals(time8)
         || currentTime.equals(time10) || currentTime.equals(time13) || currentTime.equals(time14)
         || currentTime.equals(time19) || currentTime.equals(time21)) {
-      restaurants = new ArrayList<>(restaurantRepositoryService.findRestaurantsByName(
-          getRestaurantsRequest.getLatitude(), getRestaurantsRequest.getLongitude(),
-          getRestaurantsRequest.getSearchFor(), currentTime, peakHoursServingRadiusInKms));
-      restaurants.addAll(new ArrayList<>(restaurantRepositoryService.findRestaurantsByAttributes(
-          getRestaurantsRequest.getLatitude(), getRestaurantsRequest.getLongitude(),
-          getRestaurantsRequest.getSearchFor(), currentTime, peakHoursServingRadiusInKms)));
+      try {
+        CompletableFuture<List<Restaurant>> result1 =
+            CompletableFuture.supplyAsync(() -> restaurantRepositoryService.findRestaurantsByName(
+                getRestaurantsRequest.getLatitude(), getRestaurantsRequest.getLongitude(),
+                getRestaurantsRequest.getSearchFor(), currentTime, peakHoursServingRadiusInKms));
+        restaurants = new ArrayList<>(result1.get());
+        CompletableFuture<List<Restaurant>> result2 = CompletableFuture
+            .supplyAsync(() -> restaurantRepositoryService.findRestaurantsByAttributes(
+                getRestaurantsRequest.getLatitude(), getRestaurantsRequest.getLongitude(),
+                getRestaurantsRequest.getSearchFor(), currentTime, peakHoursServingRadiusInKms));
+        restaurants.addAll(new ArrayList<>(result2.get()));
+      } catch (InterruptedException | ExecutionException e) {
+        throw new QEatsAsyncException("Exception in running parallel execution of Services");
+      }
     } else {
-      restaurants = new ArrayList<>(restaurantRepositoryService.findRestaurantsByName(
-          getRestaurantsRequest.getLatitude(), getRestaurantsRequest.getLongitude(),
-          getRestaurantsRequest.getSearchFor(), currentTime, normalHoursServingRadiusInKms));
-      restaurants.addAll(new ArrayList<>(restaurantRepositoryService.findRestaurantsByAttributes(
-          getRestaurantsRequest.getLatitude(), getRestaurantsRequest.getLongitude(),
-          getRestaurantsRequest.getSearchFor(), currentTime, normalHoursServingRadiusInKms)));
+      try {
+        CompletableFuture<List<Restaurant>> result1 =
+            CompletableFuture.supplyAsync(() -> restaurantRepositoryService.findRestaurantsByName(
+                getRestaurantsRequest.getLatitude(), getRestaurantsRequest.getLongitude(),
+                getRestaurantsRequest.getSearchFor(), currentTime, peakHoursServingRadiusInKms));
+        restaurants = new ArrayList<>(result1.get());
+        CompletableFuture<List<Restaurant>> result2 = CompletableFuture
+            .supplyAsync(() -> restaurantRepositoryService.findRestaurantsByAttributes(
+                getRestaurantsRequest.getLatitude(), getRestaurantsRequest.getLongitude(),
+                getRestaurantsRequest.getSearchFor(), currentTime, peakHoursServingRadiusInKms));
+        restaurants.addAll(new ArrayList<>(result2.get()));
+      } catch (InterruptedException | ExecutionException e) {
+        throw new QEatsAsyncException("Exception in running parallel execution of Services");
+      }
     }
 
 
@@ -142,5 +160,15 @@ public class RestaurantServiceImpl implements RestaurantService {
     return uniqueRestaurantList;
   }
 
+  // TODO: CRIO_TASK_MODULE_MULTITHREADING
+  // Implement multi-threaded version of RestaurantSearch.
+  // Implement variant of findRestaurantsBySearchQuery which is at least 1.5x time faster than
+  // findRestaurantsBySearchQuery.
+  @Override
+  public GetRestaurantsResponse findRestaurantsBySearchQueryMt(
+      GetRestaurantsRequest getRestaurantsRequest, LocalTime currentTime) {
+
+    return null;
+  }
 }
 

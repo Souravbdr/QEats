@@ -7,6 +7,7 @@
 package com.crio.qeats.controller;
 
 import com.crio.qeats.dto.Restaurant;
+import com.crio.qeats.exceptions.QEatsAsyncException;
 import com.crio.qeats.exchanges.GetRestaurantsRequest;
 import com.crio.qeats.exchanges.GetRestaurantsResponse;
 import com.crio.qeats.services.RestaurantService;
@@ -14,6 +15,7 @@ import java.time.LocalTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import javax.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +69,7 @@ public class RestaurantController {
     getRestaurantsResponse = restaurantService.findAllRestaurantsCloseBy(getRestaurantsRequest, LocalTime.now());
     if(getRestaurantsRequest.getSearchFor()!=null || getRestaurantsRequest.getSearchFor()!=""){
       GetRestaurantsResponse resp = restaurantService.findRestaurantsBySearchQuery(getRestaurantsRequest, LocalTime.now());
+      
       getRestaurantsResponse.getRestaurants().addAll(resp!=null ? resp.getRestaurants():Collections.emptyList());
     }
     List<Restaurant> restaurants = getRestaurantsResponse.getRestaurants();
@@ -81,19 +84,6 @@ public class RestaurantController {
     return ResponseEntity.ok().body(getRestaurantsResponse);
   }
 
-    @ExceptionHandler(BindException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<String> handleBindException(BindException ex) {
-        // Extracting field error details
-        StringBuilder errorMessageBuilder = new StringBuilder("Invalid request parameters: ");
-        for (FieldError fieldError : ex.getFieldErrors()) {
-            errorMessageBuilder.append(fieldError.getField())
-                    .append(" - ")
-                    .append(fieldError.getDefaultMessage())
-                    .append("; ");
-        }
-        String errorMessage = errorMessageBuilder.toString().trim();
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
-    }
+    
 }
 

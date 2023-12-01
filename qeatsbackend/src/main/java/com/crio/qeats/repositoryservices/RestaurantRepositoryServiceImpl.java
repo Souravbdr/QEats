@@ -98,6 +98,7 @@ public class RestaurantRepositoryServiceImpl implements RestaurantRepositoryServ
           restaurants.add(convertToDto(restaurantEntity));
         }
       }
+      if(redisConfiguration.isCacheAvailable())
       saveRestaurantListToRedis(redisConfiguration.getJedisPool().getResource(), geoHash.toBase32(),
           restaurants);
     }

@@ -10,6 +10,7 @@ package com.crio.qeats.services;
 import com.crio.qeats.exchanges.GetRestaurantsRequest;
 import com.crio.qeats.exchanges.GetRestaurantsResponse;
 import java.time.LocalTime;
+import java.util.concurrent.ExecutionException;
 
 public interface RestaurantService {
 
@@ -47,9 +48,21 @@ public interface RestaurantService {
    * @param getRestaurantsRequest valid lat/long and searchFor
    * @return GetRestaurantsResponse object containing a list of open restaurants or an
    *     empty list if none fits the criteria.
+ * @throws ExecutionException
+ * @throws InterruptedException
    */
   GetRestaurantsResponse findRestaurantsBySearchQuery(
       GetRestaurantsRequest getRestaurantsRequest, LocalTime currentTime);
 
 
+  /**
+   * Identical input and output to @link{findRestaurantsBySearchQuery} but
+   * use a multi-threaded implementation.
+   * @param getRestaurantsRequest valid lat/long with searchFor string
+   * @param currentTime current time
+   * @return GetRestaurantsResponse object containing a list of open restaurants or an
+   *     empty list if none fits the criteria.
+   */
+  GetRestaurantsResponse findRestaurantsBySearchQueryMt(
+      GetRestaurantsRequest getRestaurantsRequest, LocalTime currentTime);
 }
