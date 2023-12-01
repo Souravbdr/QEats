@@ -131,12 +131,12 @@ public class RestaurantServiceImpl implements RestaurantService {
         CompletableFuture<List<Restaurant>> result1 =
             CompletableFuture.supplyAsync(() -> restaurantRepositoryService.findRestaurantsByName(
                 getRestaurantsRequest.getLatitude(), getRestaurantsRequest.getLongitude(),
-                getRestaurantsRequest.getSearchFor(), currentTime, peakHoursServingRadiusInKms));
+                getRestaurantsRequest.getSearchFor(), currentTime, normalHoursServingRadiusInKms));
         restaurants = new ArrayList<>(result1.get());
         CompletableFuture<List<Restaurant>> result2 = CompletableFuture
             .supplyAsync(() -> restaurantRepositoryService.findRestaurantsByAttributes(
                 getRestaurantsRequest.getLatitude(), getRestaurantsRequest.getLongitude(),
-                getRestaurantsRequest.getSearchFor(), currentTime, peakHoursServingRadiusInKms));
+                getRestaurantsRequest.getSearchFor(), currentTime, normalHoursServingRadiusInKms));
         restaurants.addAll(new ArrayList<>(result2.get()));
       } catch (InterruptedException | ExecutionException e) {
         throw new QEatsAsyncException("Exception in running parallel execution of Services");
